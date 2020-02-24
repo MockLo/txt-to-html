@@ -9,7 +9,6 @@ import store from './store'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
-// Vue.prototype.$modal = modal
 Vue.config.productionTip = false
 
 Vue.use(Modal)

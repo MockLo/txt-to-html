@@ -3,7 +3,7 @@
     <section class="statusBar"></section>
     <header class="header">
       <i></i>
-      <span @click="dd">这里是标</span>
+      <span>这里是标</span>
       <i></i>
     </header>
     <PageArea class="page" />
@@ -14,21 +14,7 @@
 import PageArea from './PageArea'
 
 export default {
-  components: { PageArea },
-
-  methods: {
-    dd() {
-      this.$prompt('请填写邮箱', {
-        pattern: /^\S+@\S+\.\S+$/
-      })
-        .then(value => {
-          console.log(value)
-        })
-        .catch(() => {
-          console.log(12)
-        })
-    }
-  }
+  components: { PageArea }
 }
 </script>
 

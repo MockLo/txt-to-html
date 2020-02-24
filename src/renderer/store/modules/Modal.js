@@ -1,67 +1,42 @@
 const state = {
-  crtType: '',
-  cfg_alert: {},
-  cfg_confirm: {},
-  cfg_prompt: {}
+  cfg: {}
 }
 
-// const getters = {
-//   crtCfg: state => state[`cfg_${state.crtType}`]
-// }
-
 const mutations = {
-  OPEN_ALERT(state, cfg) {
-    state.crtType = 'alert'
-    state.cfg_alert = { ...cfg }
+  OPEN_MODAL_MUTATION(state, cfg) {
+    state.cfg = cfg
   },
 
-  OPEN_CONFIRM(state, cfg) {
-    state.crtType = 'confirm'
-    state.cfg_confirm = { ...cfg }
-  },
-
-  OPEN_PROMPT(state, cfg) {
-    state.crtType = 'prompt'
-    state.cfg_prompt = { ...cfg }
-  },
-
-  CLOSE_MODAL(state) {
-    let type = `cfg_${state.crtType}`
-    state[type] = {}
-    state.crtType = ''
+  CLOSE_MODAL_MUTATION(state) {
+    state.cfg = {}
   }
 }
 
 const actions = {
   OPEN_MODAL({ commit }, modalCfg) {
-    let { type } = modalCfg
     return new Promise((resolve, reject) => {
-      commit(`OPEN_${type.toUpperCase()}`, {
+      commit('OPEN_MODAL_MUTATION', {
         ...modalCfg,
         cb: {
           btn: function() {
-            commit('CLOSE_MODAL')
+            commit('CLOSE_MODAL_MUTATION')
             resolve()
           },
           close: function() {
-            commit('CLOSE_MODAL')
+            commit('CLOSE_MODAL_MUTATION')
             reject()
           },
           btnRight: function(promptData) {
-            commit('CLOSE_MODAL')
+            commit('CLOSE_MODAL_MUTATION')
             resolve(promptData)
           },
           btnLeft: function() {
-            commit('CLOSE_MODAL')
+            commit('CLOSE_MODAL_MUTATION')
             reject()
           }
         }
       })
     })
-  },
-
-  CLOSE_MODAL({ commit }, status) {
-    return commit('CLOSE_MODAL', status)
   }
 }
 
