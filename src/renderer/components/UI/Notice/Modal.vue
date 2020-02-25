@@ -26,7 +26,14 @@
           <i class="btn-close" @click="clickHandler('close')"></i>
         </div>
         <div class="msg">{{ cfg.msg }}</div>
-        <input class="promptInput" type="text" v-model="promptData" :err="errPromptInput" autocomplete="off" />
+        <input
+          class="promptInput"
+          type="text"
+          v-model="promptData"
+          :err="errPromptInput"
+          @keyup.enter="promptRight"
+          autocomplete="off"
+        />
         <p class="errMsg">{{ cfg.errMsg }}</p>
         <Btn class="btn" type="primary" @click="promptRight">{{ cfg.btnRightText }}</Btn>
         <Btn class="btn" @click="clickHandler('btnLeft')">{{ cfg.btnLeftText }}</Btn>
@@ -51,16 +58,33 @@ export default {
 
   computed: mapState({
     crtType: state => state.Modal.cfg.type,
-    cfg: state => state.Modal.cfg
+    cfg: state => state.Modal.cfg,
+    previewText: state => state.Modal.cfg.previewText
   }),
 
   watch: {
     promptData(v) {
       v = trim(v)
-      if (!this.cfg.pattern.test(v)) {
-        this.errPromptInput = true
-      } else {
+      let pattern = this.cfg.pattern
+      if (pattern) {
+        if (!pattern.test(v)) {
+          this.errPromptInput = true
+        } else {
+          this.errPromptInput = false
+        }
+      }
+    },
+
+    crtType(v) {
+      if (!v) {
+        this.promptData = ''
         this.errPromptInput = false
+      }
+    },
+
+    previewText(v) {
+      if (v) {
+        this.promptData = v
       }
     }
   },
@@ -72,7 +96,7 @@ export default {
 
     promptRight() {
       if (this.errPromptInput || !this.promptData) return
-      this.cfg.cb.btnRight(trim(this.promptData))
+      this.cfg.cb.btnRight({ value: trim(this.promptData) })
     }
   }
 }
@@ -93,7 +117,7 @@ export default {
 }
 
 .modal {
-  width: 300px;
+  width: 350px;
   background-color: #fff;
   border: 1px solid $color-line;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -103,7 +127,7 @@ export default {
 
 .title {
   position: relative;
-  font-size: 14px;
+  font-size: 16px;
   height: 25px;
   line-height: 25px;
 
@@ -117,10 +141,10 @@ export default {
 }
 
 .msg {
-  font-size: 12px;
+  font-size: 14px;
   color: #5f656b;
   overflow: hidden;
-  margin: 10px 0;
+  margin: 20px 0;
   max-height: 145px;
 }
 
@@ -142,15 +166,15 @@ export default {
 
 .promptInput {
   display: block;
-  margin-top: 10px;
+  margin-top: -10px;
   width: 100%;
 
   & + .errMsg {
     visibility: hidden;
     color: $color-error;
     margin-bottom: 10px;
-    padding-top: 5px;
-    font-size: 10px;
+    padding-left: 10px;
+    font-size: 12px;
   }
 
   &[err] {

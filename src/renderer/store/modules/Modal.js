@@ -8,35 +8,35 @@ const mutations = {
   },
 
   CLOSE_MODAL_MUTATION(state) {
-    state.cfg = {}
+    state.cfg.type = ''
   }
 }
 
 const actions = {
   OPEN_MODAL({ commit }, modalCfg) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       commit('OPEN_MODAL_MUTATION', {
         ...modalCfg,
         cb: {
           btn: function() {
             commit('CLOSE_MODAL_MUTATION')
-            resolve()
+            resolve('btn')
           },
           close: function() {
             commit('CLOSE_MODAL_MUTATION')
-            reject()
+            resolve('close')
           },
-          btnRight: function(promptData) {
+          btnRight: function(res) {
             commit('CLOSE_MODAL_MUTATION')
-            resolve(promptData)
+            resolve(res)
           },
           btnLeft: function() {
             commit('CLOSE_MODAL_MUTATION')
-            reject()
+            resolve('btnLeft')
           }
         }
       })
-    })
+    }).catch(err => console.log(err))
   }
 }
 

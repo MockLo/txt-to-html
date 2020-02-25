@@ -3,7 +3,7 @@
     <section class="statusBar"></section>
     <header class="header">
       <i></i>
-      <span>这里是标</span>
+      <span @click="modifyTitle" title="点击修改标题">{{ TITLE }}</span>
       <i></i>
     </header>
     <PageArea class="page" />
@@ -14,7 +14,25 @@
 import PageArea from './PageArea'
 
 export default {
-  components: { PageArea }
+  components: { PageArea },
+
+  data() {
+    return {
+      TITLE: 'Title'
+    }
+  },
+
+  methods: {
+    modifyTitle() {
+      this.$prompt('请输入Title：', {
+        previewText: this.TITLE
+      }).then(res => {
+        if (res.value) {
+          this.TITLE = res.value
+        }
+      })
+    }
+  }
 }
 </script>
 
@@ -53,11 +71,19 @@ export default {
 
   & > span {
     overflow: hidden;
+    height: 100%;
     line-height: 60px;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 65%;
     text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      border-radius: 3px;
+      box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #409eff;
+    }
   }
 }
 

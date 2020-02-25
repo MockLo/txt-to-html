@@ -34,7 +34,7 @@ export default {
 <style lang="scss">
 @mixin btn {
   display: inline-block;
-  padding: 7.5px 15px;
+  padding: 7.5px 20px;
   font-family: fzlth;
   outline: none;
   -webkit-appearance: none;
@@ -46,6 +46,7 @@ export default {
   text-align: center;
   cursor: pointer;
   transition: 0.1s;
+  font-size: 14px;
 
   &[round] {
     border-radius: 15px;

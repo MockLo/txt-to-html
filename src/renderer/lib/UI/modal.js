@@ -1,20 +1,7 @@
 import ModalVue from '../../components/UI/Notice/Modal.vue'
 
-const makePromise = function(_this, cfg) {
-  return new Promise((resolve, reject) => {
-    _this.$store
-      .dispatch('OPEN_MODAL', cfg)
-      .then(promptData => {
-        resolve(promptData)
-      })
-      .catch(() => {
-        reject()
-      })
-  })
-}
-
 const Modal = {
-  install: function(Vue, options) {
+  install: function(Vue) {
     /**
      * 展示alert
      * @param {string} msg 信息
@@ -25,7 +12,15 @@ const Modal = {
      */
     Vue.prototype.$alert = function(msg = '', options = {}) {
       let { title = '提示', btnText = '确定' } = options
-      return makePromise(this, { type: 'alert', msg, title, btnText })
+      return new Promise((resolve, reject) => {
+        this.$store
+          .dispatch('OPEN_MODAL', { type: 'alert', msg, title, btnText })
+          .then(
+            () => resolve(),
+            () => reject()
+          )
+          .catch(e => console.log(e))
+      })
     }
 
     /**
@@ -39,7 +34,15 @@ const Modal = {
      */
     Vue.prototype.$confirm = function(msg = '', options = {}) {
       let { title = '提示', btnRightText = '确定', btnLeftText = '取消' } = options
-      return makePromise(this, { type: 'confirm', msg, title, btnRightText, btnLeftText })
+      return new Promise((resolve, reject) => {
+        this.$store
+          .dispatch('OPEN_MODAL', { type: 'confirm', msg, title, btnRightText, btnLeftText })
+          .then(
+            () => resolve(),
+            _act => reject(_act)
+          )
+          .catch(e => console.log(e))
+      })
     }
 
     /**
@@ -59,9 +62,27 @@ const Modal = {
         btnRightText = '确定',
         btnLeftText = '取消',
         pattern = /^.*$/,
-        errMsg = '格式不正确'
+        errMsg = '格式不正确',
+        previewText = ''
       } = options
-      return makePromise(this, { type: 'prompt', msg, title, btnRightText, btnLeftText, pattern, errMsg })
+      return new Promise((resolve, reject) => {
+        this.$store
+          .dispatch('OPEN_MODAL', {
+            type: 'prompt',
+            msg,
+            title,
+            btnRightText,
+            btnLeftText,
+            pattern,
+            errMsg,
+            previewText
+          })
+          .then(
+            promptData => resolve(promptData),
+            _act => reject(_act)
+          )
+          .catch(e => console.log(e))
+      })
     }
 
     Vue.component(ModalVue.name, ModalVue)

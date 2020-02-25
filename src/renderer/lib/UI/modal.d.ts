@@ -27,6 +27,7 @@ declare module 'vue/types/vue' {
         btnLeftText?: string
         pattern?: string
         errMsg?: string
+        previewText?: string
       }
     ) => Promise<string>
   }
