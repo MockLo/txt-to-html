@@ -3,36 +3,24 @@
     <section>
       <Simulator />
     </section>
-    <section></section>
+    <section>
+      <WorkArea />
+    </section>
   </div>
 </template>
 
 <script>
 import Simulator from '../Simulator/Simulator'
+import WorkArea from './WorkArea'
+
+let UP_FILE = ''
 
 export default {
-  components: { Simulator },
-
-  data() {
-    return {
-      modalCfg: {
-        title: '',
-        msg: '',
-        rightBtnText: '',
-        leftBtnText: ''
-      }
-    }
-  },
-
-  created() {
-    // this.$alert('内容', function() {
-    //   console.log(11)
-    // })
-  }
+  components: { Simulator, WorkArea }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .workpage {
   width: 100vw;
   height: 100vh;
@@ -50,6 +38,7 @@ export default {
     }
     &:last-child {
       width: 50%;
+      padding: 10px;
     }
   }
 }
