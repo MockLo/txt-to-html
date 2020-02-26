@@ -8,7 +8,9 @@
 import DragArea from './DragArea'
 
 export default {
-  components: { DragArea }
+  components: { DragArea },
+
+  mounted() {}
 }
 </script>
 

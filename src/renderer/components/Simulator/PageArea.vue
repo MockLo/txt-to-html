@@ -1,7 +1,7 @@
 <template>
-  <section id="preview">
+  <section>
     <link v-if="theme" rel="stylesheet" :href="themeCssPath" />
-    <h1 class="">{{ mainTitle }}</h1>
+    <section id="preview" v-html="originTxt"></section>
   </section>
 </template>
 
@@ -16,7 +16,7 @@ export default {
 
   data() {
     return {
-      mainTitle: '这里是协议标题'
+      originTxt: ''
     }
   },
 
@@ -30,6 +30,13 @@ export default {
     themeCssPath(v) {
       console.log(v)
     }
+  },
+
+  mounted() {
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.on('async-readFile-finish', (event, data) => {
+      this.originTxt = data
+    })
   }
 }
 </script>

@@ -1,48 +1,63 @@
 <template>
   <div class="drag-area">
-    <div id="upload-area" :class="{ 'drag-enter': dragEnter }">
+    <div id="upload-area" :class="{ 'drag-enter': dragEnter }" @click="openFinder">
       <div v-if="dragEnter" class="upload-tips"><i class="icon-drag"></i> 松开鼠标以导入文件</div>
       <div v-else>
         <div class="upload-text"><i class="icon-add"></i> 文件上传区域</div>
         <div class="upload-type">支持格式：<i class="icon-txt"></i> ，支持拖拽上传</div>
       </div>
     </div>
-    <div class="result-area" v-if="file.name">
-      已读取到文件：<span class="result-name">{{ file.name }}</span>
-      <span class="result-size">({{ file.size | getSize }})</span>
+    <div class="result-area" v-if="filePath">
+      已读取到文件：<span class="result-name">{{ filePath }}</span>
     </div>
+
+    <transition name="progress">
+      <div v-show="loadProgress" class="upload-progress">
+        <span>读取进度</span>
+        <progress :value="loadProgress" max="100"></progress>
+        <div :class="{ 'icon-progress': loadProgress == 100.0 }">{{ loadProgress }}%</div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+const { ipcRenderer } = require('electron')
+const remote = require('electron').remote
+const BrowserWindow = remote.BrowserWindow
+
 let DROP_ZONE = null
-let UP_FILES = null
 
 export default {
   data() {
     return {
       dragEnter: false,
 
-      file: {
-        name: '',
-        path: '',
-        size: 0,
-        type: ''
+      loadProgress: 0
+    }
+  },
+
+  computed: mapState({
+    filePath: state => state.UploadFile.path
+  }),
+
+  watch: {
+    loadProgress(v) {
+      if (v == 100.0) {
+        setTimeout(() => {
+          this.loadProgress = 0
+        }, 1000)
       }
     }
   },
 
   mounted() {
     this.disableDragEvent()
-  },
 
-  filters: {
-    getSize: size =>
-      size < 1000
-        ? `${size}B`
-        : size < 1000000
-        ? `${parseFloat(size / 1000).toFixed(2)}KB`
-        : `${parseFloat(size / 1000000).toFixed(2)}MB`
+    ipcRenderer.on('async-readFile-progress', (event, percent) => {
+      this.loadProgress = percent
+    })
   },
 
   methods: {
@@ -64,8 +79,7 @@ export default {
           // 处理拖拽文件的逻辑
           console.log('file drop')
           this.dragEnter = false
-          UP_FILES = this.dragEventHandler(e.dataTransfer)
-          console.log(UP_FILES)
+          this.dragEventHandler(e.dataTransfer)
         }
       })
       document.addEventListener('mousemove', e => {
@@ -92,13 +106,49 @@ export default {
     },
 
     fileHandler(file) {
-      let { name, path, size, type } = file
-      if (type !== 'text/plain' || !name.includes('.txt')) {
-        this.$alert('只支持上传.txt类型文件')
-        return
+      if (typeof file === 'object') {
+        let { name, path, type } = file
+        if (type !== 'text/plain' || !name.includes('.txt')) {
+          this.$alert('只支持上传.txt类型文件')
+          return
+        }
+        file = path
       }
       console.log('file:', file)
-      this.file = { name, path, size, type }
+      if (this.filePath) {
+        if (this.filePath === file) {
+          this.$alert('请勿拖拽上传重复的文件！')
+          return
+        }
+        this.$confirm(`已经加载了一个文件: ${this.filePath}，确定要覆盖它吗？`).then(action => {
+          action || this.upload(file)
+        })
+      } else {
+        this.upload(file)
+      }
+    },
+
+    upload(filePath) {
+      this.$store.dispatch('UPLOAD_FILE', filePath)
+
+      // 调用main进程的读取模块进行文件读取(异步)
+      ipcRenderer.send('async-readFile-start', filePath)
+    },
+
+    openFinder() {
+      let path = remote.dialog.showOpenDialog(
+        {
+          title: '请选择文件',
+          filters: [{ name: '文本文件', extensions: ['txt'] }],
+          properties: ['openFile', 'createDirectory'],
+          message: '请选择文件'
+        },
+        filePaths => {
+          if (filePaths && filePaths.length === 1) {
+            this.fileHandler(filePaths[0])
+          }
+        }
+      )
     }
   }
 }
@@ -118,6 +168,7 @@ export default {
 }
 
 .drag-area {
+  position: relative;
   border-radius: 5px;
   border: 2px solid $color-line;
 }
@@ -148,6 +199,22 @@ export default {
   @include flex-center;
 }
 
+.upload-progress {
+  width: 100%;
+  height: 98px;
+  @include flex-center;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  background-color: #fff;
+}
+
+progress {
+  width: 90%;
+}
+
 .icon-add {
   margin-right: 15px;
   @include icon('../../assets/icon_add.png');
@@ -163,6 +230,12 @@ export default {
   @include icon('../../assets/icon_dragEnter.png');
 }
 
+.icon-progress {
+  transition: 0.15s;
+  color: transparent;
+  @include icon('../../assets/icon_success.png');
+}
+
 .result-area {
   @include flex-center;
   font-size: 12px;
@@ -171,5 +244,12 @@ export default {
     font-size: 11px;
     margin-left: 5px;
   }
+}
+
+.progress-leave-active {
+  transition: opacity 0.3s;
+}
+.progress-leave-to {
+  opacity: 0;
 }
 </style>

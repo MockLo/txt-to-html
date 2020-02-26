@@ -84,3 +84,10 @@ app.on('ready', () => {
 //   tray = new Tray(menubarPic) // 指定图片的路径
 //   // ... 其他代码
 // }
+
+const { ipcMain } = require('electron')
+const { readFile } = require('./lib/File/readFile')
+
+ipcMain.on('async-readFile-start', (event, filePath) => {
+  readFile(filePath, event.sender)
+})
