@@ -1,6 +1,6 @@
 <template>
   <button :class="btnClass" :round="round" @click="$emit('click')">
-    <i v-if="icon"></i>
+    <i v-if="icon" :style="{ backgroundImage: `url(${icon})` }"></i>
     <span><slot></slot></span>
   </button>
 </template>
@@ -50,6 +50,13 @@ export default {
 
   &[round] {
     border-radius: 15px;
+  }
+
+  & > i {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: no-repeat center center / contain;
   }
 }
 

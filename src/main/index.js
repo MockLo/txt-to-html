@@ -17,13 +17,13 @@ let mainWindow
 const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9080` : `file://${__dirname}/index.html`
 
 function createWindow() {
-  let { width, height } = screen.getPrimaryDisplay().workAreaSize
+  let { height } = screen.getPrimaryDisplay().workAreaSize
   /**
    * Initial window options
    */
   mainWindow = new BrowserWindow({
     height: height || 1024, // 高
-    width: width || 1920, // 宽
+    width: 800, // 宽
     useContentSize: true,
     show: true, // 创建后是否显示
     // frame: true, // 是否创建frameless窗口

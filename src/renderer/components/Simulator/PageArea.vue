@@ -37,6 +37,10 @@ export default {
     ipcRenderer.on('async-readFile-finish', (event, data) => {
       this.originTxt = data
     })
+  },
+
+  methods: {
+    initTxt(data) {}
   }
 }
 </script>

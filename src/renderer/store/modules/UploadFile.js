@@ -5,10 +5,6 @@ const state = {
 const mutations = {
   UPLOAD_FILE_MUTATION(state, filePath) {
     state.path = filePath
-  },
-
-  DEL_FILE_MUTATION(state) {
-    state.path = ''
   }
 }
 

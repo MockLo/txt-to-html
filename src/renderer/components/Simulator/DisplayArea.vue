@@ -16,9 +16,9 @@ import PageArea from './PageArea'
 export default {
   components: { PageArea },
 
-  data() {
-    return {
-      TITLE: 'Title'
+  computed: {
+    TITLE() {
+      return this.$store.state.TitleBar.title
     }
   },
 
@@ -28,7 +28,7 @@ export default {
         previewText: this.TITLE
       }).then(res => {
         if (res.value) {
-          this.TITLE = res.value
+          this.$store.dispatch('UPDATE_TITLE', res.value)
         }
       })
     }
@@ -77,7 +77,7 @@ export default {
     white-space: nowrap;
     width: 65%;
     text-align: center;
-    cursor: pointer;
+    cursor: url('/static/assets/icon_edit.ico'), pointer;
 
     &:hover {
       border-radius: 3px;
