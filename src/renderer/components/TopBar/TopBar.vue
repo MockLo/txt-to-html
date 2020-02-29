@@ -1,7 +1,7 @@
 <template>
   <div class="TOPBAR">
-    <DragBar />
     <Btn type="primary">保存</Btn>
+    <DragBar />
     <Btn type="success">导出</Btn>
   </div>
 </template>
@@ -28,6 +28,15 @@ export default {
 <style lang="scss">
 .TOPBAR {
   display: flex;
-  // justify-content: space-around;
+  align-items: center;
+  justify-content: space-around;
+
+  & > button {
+    height: 35px;
+  }
+
+  & > .drag-area {
+    width: 570px;
+  }
 }
 </style>

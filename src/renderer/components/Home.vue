@@ -1,6 +1,9 @@
 <template>
   <div class="HOMEPAGE">
     <TopBar />
+    <div class="home-bottom">
+      
+    </div>
   </div>
 </template>
 
