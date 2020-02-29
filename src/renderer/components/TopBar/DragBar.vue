@@ -198,6 +198,7 @@ export default {
   left: 0;
   z-index: 3;
   background-color: #fff;
+  font-size: 12px;
 }
 
 progress {

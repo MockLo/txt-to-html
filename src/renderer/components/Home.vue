@@ -1,23 +1,54 @@
 <template>
   <div class="HOMEPAGE">
     <TopBar />
-    <div class="home-bottom">
-      
+    <div class="HOME-bottom">
+      <div class="HOME-tools">
+        <EditBar />
+      </div>
+      <div class="HOME-simulator">
+        <Simulator />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import TopBar from './TopBar/TopBar'
+import Simulator from './Simulator/Simulator'
+import EditBar from './EditBar/EditBar'
 
 export default {
-  components: { TopBar }
+  components: { TopBar, EditBar, Simulator }
 }
 </script>
 
 <style lang="scss">
 .HOMEPAGE {
   width: 100vw;
+  height: 100vh;
   padding: 10px;
+  background-color: rgb(250, 250, 250);
+  overflow: hidden;
+}
+
+.HOME-bottom {
+  width: 100%;
+  height: 93%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.HOME-tools {
+  display: flex;
+  align-items: center;
+}
+
+.HOME-simulator {
+  margin-left: 60px;
+  & > .simulator {
+    transform-origin: top center;
+    transform: scale(0.9);
+  }
 }
 </style>

@@ -29,14 +29,14 @@ export default {
 .TOPBAR {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
   & > button {
     height: 35px;
   }
 
   & > .drag-area {
-    width: 570px;
+    width: 380px;
   }
 }
 </style>

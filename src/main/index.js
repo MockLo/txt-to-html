@@ -23,7 +23,7 @@ function createWindow() {
    */
   mainWindow = new BrowserWindow({
     height: height || 1024, // 高
-    width: 800, // 宽
+    width: 580, // 宽
     useContentSize: true,
     show: true, // 创建后是否显示
     // frame: true, // 是否创建frameless窗口

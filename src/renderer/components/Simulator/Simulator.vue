@@ -19,7 +19,6 @@ export default {
   width: 445px;
   height: 877px;
   position: relative;
-  transform: scale(0.9);
 }
 
 .phone {
