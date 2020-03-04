@@ -27,7 +27,7 @@ export default {
   width: 100vw;
   height: 100vh;
   padding: 10px;
-  background-color: rgb(250, 250, 250);
+  background-color: #fafafa;
   overflow: hidden;
 }
 
@@ -45,7 +45,8 @@ export default {
 }
 
 .HOME-simulator {
-  margin-left: 60px;
+  margin-left: 50px;
+
   & > .simulator {
     transform-origin: top center;
     transform: scale(0.9);

@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { fmtTxt } = require('./fmtTxt')
 
 export const readFile = function(filePath, sender) {
   // 根据指定的文件创建一个可读流，得到一个可读流对象
@@ -8,7 +9,7 @@ export const readFile = function(filePath, sender) {
   console.log(`开始读取：${filePath}, 文件大小：${totalSize}`)
 
   let curSize = 0
-  let data = '<p contenteditable="true">'
+  let data = '<p>'
   let percent = ''
 
   // 流对象有一个 data 事件，流对象会自动的帮我们去读取文件中的数据
@@ -20,7 +21,7 @@ export const readFile = function(filePath, sender) {
     // 每一次读取到了一点数据，将该数据的长度累加起来 / 文件的总大小 * 100 得到百分比
     curSize += chunk.length
     chunk = chunk.toString() // 转成字符串
-    data += chunk.replace(/\n/g, '</p><p contenteditable="true">')
+    data += fmtTxt(chunk)
     percent = ((curSize / totalSize) * 100).toFixed(2)
     console.log(`读取中，当前chunk size: ${curSize}, 进度: ${percent}`)
     sender.send('async-readFile-progress', percent)

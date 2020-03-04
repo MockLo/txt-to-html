@@ -1,5 +1,5 @@
 const state = {
-  title: '标题'
+  title: '请修改标题'
 }
 
 const mutations = {

@@ -27,7 +27,7 @@ function createWindow() {
     useContentSize: true,
     show: true, // 创建后是否显示
     // frame: true, // 是否创建frameless窗口
-    fullscreenable: true, // 是否允许全屏
+    fullscreenable: false, // 是否允许全屏
     center: true, // 是否出现在屏幕居中的位置
     // backgroundColor: '#fff', // 背景色，用于transparent和frameless窗口
     // titleBarStyle: 'xxx', // 标题栏的样式，有hidden、hiddenInset、customButtonsOnHover等

@@ -126,9 +126,6 @@ export default {
 
     upload(filePath) {
       this.$store.dispatch('UPLOAD_FILE', filePath)
-
-      // 调用main进程的读取模块进行文件读取(异步)
-      ipcRenderer.send('async-readFile-start', filePath)
     },
 
     openFinder() {
