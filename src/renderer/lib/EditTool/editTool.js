@@ -87,17 +87,39 @@ const mdMark = () => {
 /**
  * todo列表
  */
-const mdTODO = () => {
+// const mdTODO = () => {
+//   let sel = window.getSelection()
+//   let range = sel.getRangeAt(0)
+//   let start = range.startOffset
+//   let end = range.endOffset
+
+//   if (start === 0 && end === 0 && range.commonAncestorContainer.nodeName === 'P') {
+//     // 替换之前的空p标签
+//     range.selectNode(sel.focusNode)
+//     cmd('insertHTML', `<p class="md-todo" contenteditable="false" onkeydown="todoEnterHandler()"></p>`)
+
+//     // 在刚生成的ul里添加DOM
+//     let p = sel.focusNode.children[range.startOffset]
+//     p.innerHTML += `<ul><li><input type="checkbox"><span class="todo-item" contenteditable="true"></span></li></ul>`
+
+//     // 使光标落在刚刚添加的span上
+//     let span = p.querySelector('span.todo-item')
+//     span.focus()
+//   }
+// }
+
+const mdLink = url => {
+  recoverSelection()
+  if (!url) url = ' '
   let sel = window.getSelection()
-  let range = sel.getRangeAt(0)
-  let crtNode = sel.focusNode
-
-  if (range.startOffset === 0 && range.endOffset === 0 && range.commonAncestorContainer.nodeName === 'P') {
-    sel.getRangeAt(0).selectNode(crtNode)
-
-    cmd('insertHTML', `<p class="md-todo" contenteditable="false" onkeydown="todoEnterHandler()"><input type="checkbox"></p>`)
-    sel.focusNode.innerHTML += `<span class="todo-item" contenteditable="true"></span>`
-  }
+  if (sel.isCollapsed) return
+  cmd('createLink', url)
 }
 
-export { cmd, saveSelection, recoverSelection, mdMark, mdTODO }
+// const mdQuote = () => {
+//   let sel = window.getSelection()
+//   cmd('insertHTML', '<p class="md-quote"></p>')
+//   if (sel.focusNode) sel.focusNode.focus()
+// }
+
+export { cmd, saveSelection, mdMark, mdLink }

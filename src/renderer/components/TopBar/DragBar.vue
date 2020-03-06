@@ -129,7 +129,7 @@ export default {
     },
 
     openFinder() {
-      let path = remote.dialog.showOpenDialog(
+      remote.dialog.showOpenDialog(
         {
           title: '请选择文件',
           filters: [{ name: '文本文件', extensions: ['txt'] }],

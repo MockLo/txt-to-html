@@ -64,21 +64,56 @@ h5 {
     min-height: 24px;
   }
 
-  & ol,
-  & ul {
+  & > ol,
+  & > ul {
     padding-left: 2em;
+  }
+
+  & > hr {
+    height: 2px;
+    margin: 20px 0;
+    border: none;
+    background-color: $color-line;
+  }
+
+  table,
+  td,
+  th {
+    border: 1px solid $color-line;
   }
 }
 
 .md-todo {
-  & > input {
-    cursor: pointer;
-    margin: 5px 10px 0;
-  }
+  padding-left: 0;
+  list-style: none;
 
-  & > .todo-item {
-    display: inline-block;
-    width: 90%;
+  & > li {
+    & > input {
+      cursor: pointer;
+      margin: 5px 10px 0;
+    }
+
+    & > .todo-item {
+      display: inline-block;
+      width: 90%;
+    }
+  }
+}
+
+.md-img {
+  display: inherit;
+  margin: 15px auto;
+  max-width: 90%;
+  max-height: 300px;
+}
+
+.md-table {
+  width: 93%;
+  margin: 10px auto;
+  border-collapse: collapse;
+
+  & td {
+    padding: 10px;
   }
 }
 </style>

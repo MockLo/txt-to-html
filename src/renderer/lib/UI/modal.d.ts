@@ -25,7 +25,7 @@ declare module 'vue/types/vue' {
         title: string
         btnRightText?: string
         btnLeftText?: string
-        pattern?: string
+        pattern?: RegExp
         errMsg?: string
         previewText?: string
       }
