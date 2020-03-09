@@ -25,11 +25,8 @@ export default {
   methods: {
     modifyTitle() {
       this.$prompt('请输入Title：', {
-        previewText: this.TITLE
-      }).then(res => {
-        if (res.value) {
-          this.$store.dispatch('UPDATE_TITLE', res.value)
-        }
+        previewText: this.TITLE,
+        success: res => this.$store.dispatch('UPDATE_TITLE', res)
       })
     }
   }

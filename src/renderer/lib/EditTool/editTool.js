@@ -122,4 +122,55 @@ const mdLink = url => {
 //   if (sel.focusNode) sel.focusNode.focus()
 // }
 
-export { cmd, saveSelection, mdMark, mdLink }
+const mdTable = {
+  getTable() {
+    let target = window.getSelection().getRangeAt(0).commonAncestorContainer
+    if (target.nodeType === 3) {
+      target = target.parentNode
+    }
+    let tbody = target.parentNode.parentNode
+    return {
+      tbody,
+      cellIndex: target.cellIndex,
+      rowIndex: target.parentNode.rowIndex,
+      cells: target.parentNode.childElementCount,
+      rows: tbody.childElementCount
+    }
+  },
+
+  addColumn: () => {
+    let { tbody, cellIndex } = mdTable.getTable()
+    tbody.childNodes.forEach((tr, key) => {
+      let _childs = tr.childNodes
+      let child = document.createElement(key ? 'td' : 'th')
+      cellIndex === _childs.length - 1 ? tr.appendChild(child) : tr.insertBefore(child, _childs[cellIndex + 1])
+    })
+  },
+  addRow: () => {
+    let { tbody, rowIndex, rows } = mdTable.getTable()
+    let childs = tbody.childNodes
+    let child = document.createElement('tr')
+    child.innerHTML = '<td></td>'.repeat(rows)
+    rowIndex === childs.length - 1 ? tbody.appendChild(child) : tbody.insertBefore(child, childs[rowIndex + 1])
+  },
+  delColumn() {
+    let { tbody, cellIndex, cells } = mdTable.getTable()
+    let _do = () => {
+      tbody.childNodes.forEach(tr => {
+        tr.childNodes[cellIndex].remove()
+      })
+    }
+    if (cells === 1) {
+      this.$confirm('确定删除此表格吗？', {
+        success: () => _do()
+      })
+    } else {
+      _do()
+    }
+  },
+  delRow: () => {
+    // let { tbody, rowIndex, rows } = mdTable.getTable()
+  }
+}
+
+export { cmd, saveSelection, mdMark, mdLink, mdTable }

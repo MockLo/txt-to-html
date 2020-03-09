@@ -6,29 +6,37 @@ declare module 'vue/types/vue' {
       msg: string,
       options?: {
         title?: string
-        btnText?: string
+        successText?: string
+        success?: Function
+        close?: Function
       }
-    ) => Promise<undefined>
+    ) => void
 
     $confirm: (
       msg: string,
       options?: {
         title?: string
-        btnRightText?: string
-        btnLeftText?: string
+        successText?: string
+        failureText?: string
+        success?: Function
+        failure?: Function
+        close?: Function
       }
-    ) => Promise<undefined>
+    ) => void
 
     $prompt: (
       msg: string,
       options?: {
         title: string
-        btnRightText?: string
-        btnLeftText?: string
+        successText?: string
+        failureText?: string
         pattern?: RegExp
         errMsg?: string
         previewText?: string
+        success?: (promptData?: string) => void
+        failure?: Function
+        close?: Function
       }
-    ) => Promise<string>
+    ) => void
   }
 }

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { cmd, saveSelection, mdMark, mdLink } from '../../lib/EditTool/editTool'
+import { cmd, saveSelection, mdMark, mdLink, mdTable } from '../../lib/EditTool/editTool'
 
 export default {
   data() {
@@ -90,10 +90,10 @@ export default {
           tap: 'showChildren',
           children: [
             { name: '添加表格', icon: require('../../assets/icon_addTable.png'), tap: ['table', ''] },
-            { name: '添加列', icon: require('../../assets/icon_table_addColumn.png'), tap: ['table', 'addColumn'] },
-            { name: '添加行', icon: require('../../assets/icon_table_addRow.png'), tap: ['table', 'addRow'] },
-            { name: '删除列', icon: require('../../assets/icon_table_delColumn.png'), tap: ['table', 'delColumn'] },
-            { name: '删除行', icon: require('../../assets/icon_table_delRow.png'), tap: ['table', 'delRow'] }
+            { name: '向右添加列', icon: require('../../assets/icon_table_addColumn.png'), tap: ['table', 'addColumn'] },
+            { name: '向下添加行', icon: require('../../assets/icon_table_addRow.png'), tap: ['table', 'addRow'] },
+            { name: '删除当前列', icon: require('../../assets/icon_table_delColumn.png'), tap: ['table', 'delColumn'] },
+            { name: '删除当前行', icon: require('../../assets/icon_table_delRow.png'), tap: ['table', 'delRow'] }
           ]
         }
       ],
@@ -143,9 +143,10 @@ export default {
         case 'createLink': // 超链接
           saveSelection()
           this.$prompt('请输入链接：', {
-            pattern: /(?:(https?|ftp|file):)?\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
-          }).then(res => {
-            if (res.value) mdLink(res.value)
+            pattern: /(?:(https?|ftp|file):)?\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/,
+            success: res => {
+              if (res) mdLink(res)
+            }
           })
           return
 
@@ -166,24 +167,14 @@ export default {
           return
 
         case 'table': // 表格
-          switch (md_param) {
-            case 'addColumn': // 添加列
-              break
-            case 'addRow': // 添加行
-              break
-            case 'delColumn': // 删除行
-              break
-            case 'delRow': // 删除列
-              break
-
-            default:
-              cmd(
-                'insertHTML',
-                `<table class="md-table" border="1"><tr><th></th><th></th></tr><tr><td></td><td></td></tr></table>`
-              )
-              break
+          if (md_param) {
+            mdTable[md_param].apply(this)
+          } else {
+            cmd(
+              'insertHTML',
+              `<table class="md-table" border="1"><tr><th></th><th></th></tr><tr><td></td><td></td></tr></table>`
+            )
           }
-
           return
 
         default:

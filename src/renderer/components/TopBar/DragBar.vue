@@ -116,8 +116,8 @@ export default {
           this.$alert('请勿拖拽上传重复的文件！')
           return
         }
-        this.$confirm(`已经加载了一个文件: ${this.filePath}，确定要覆盖它吗？`).then(action => {
-          action || this.upload(file)
+        this.$confirm(`已经加载了一个文件: ${this.filePath}，确定要覆盖它吗？`, {
+          success: () => this.upload(file)
         })
       } else {
         this.upload(file)

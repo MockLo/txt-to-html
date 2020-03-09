@@ -1,26 +1,37 @@
 <template>
   <transition name="fade">
     <div class="modal-wrapper" v-show="!!crtType">
-      <div class="modal" v-show="crtType === 'alert'">
+      <div class="modal">
         <div class="title">
           <span>{{ cfg.title }}</span>
           <i class="btn-close" @click="clickHandler('close')"></i>
         </div>
         <div class="msg">{{ cfg.msg }}</div>
-        <Btn class="btn" type="primary" @click="clickHandler('btn')">{{ cfg.btnText }}</Btn>
+        <input
+          class="promptInput"
+          type="text"
+          v-if="crtType === 'prompt'"
+          v-model="promptData"
+          :err="errPromptInput"
+          @keyup.enter="clickHandler('success')"
+          autocomplete="off"
+        />
+        <p v-if="crtType === 'prompt'" class="errMsg">{{ cfg.errMsg }}</p>
+        <Btn class="btn" type="primary" @click="clickHandler('success')">{{ cfg.successText }}</Btn>
+        <Btn class="btn" v-show="crtType !== 'alert'" @click="clickHandler('failure')">{{ cfg.failureText }}</Btn>
       </div>
 
-      <div class="modal" v-show="crtType === 'confirm'">
+      <!-- <div class="modal" v-show="crtType === 'confirm'">
         <div class="title">
           <span>{{ cfg.title }}</span>
           <i class="btn-close" @click="clickHandler('close')"></i>
         </div>
         <div class="msg">{{ cfg.msg }}</div>
-        <Btn class="btn" type="primary" @click="clickHandler('btnRight')">{{ cfg.btnRightText }}</Btn>
-        <Btn class="btn" @click="clickHandler('btnLeft')">{{ cfg.btnLeftText }}</Btn>
-      </div>
+        <Btn class="btn" type="primary" @click="clickHandler('btnRight')">{{ cfg.successText }}</Btn>
+        <Btn class="btn" @click="clickHandler('btnLeft')">{{ cfg.failureText }}</Btn>
+      </div> -->
 
-      <div class="modal" v-show="crtType === 'prompt'">
+      <!-- <div class="modal" v-show="crtType === 'prompt'">
         <div class="title">
           <span>{{ cfg.title }}</span>
           <i class="btn-close" @click="clickHandler('close')"></i>
@@ -35,9 +46,9 @@
           autocomplete="off"
         />
         <p class="errMsg">{{ cfg.errMsg }}</p>
-        <Btn class="btn" type="primary" @click="promptRight">{{ cfg.btnRightText }}</Btn>
-        <Btn class="btn" @click="clickHandler('btnLeft')">{{ cfg.btnLeftText }}</Btn>
-      </div>
+        <Btn class="btn" type="primary" @click="promptRight">{{ cfg.successText }}</Btn>
+        <Btn class="btn" @click="clickHandler('btnLeft')">{{ cfg.failureText }}</Btn>
+      </div> -->
     </div>
   </transition>
 </template>
@@ -57,8 +68,8 @@ export default {
   },
 
   computed: mapState({
-    crtType: state => state.Modal.cfg.type,
     cfg: state => state.Modal.cfg,
+    crtType: state => state.Modal.cfg.type,
     previewText: state => state.Modal.cfg.previewText
   }),
 
@@ -67,11 +78,7 @@ export default {
       v = trim(v)
       let pattern = this.cfg.pattern
       if (pattern) {
-        if (!pattern.test(v)) {
-          this.errPromptInput = true
-        } else {
-          this.errPromptInput = false
-        }
+        this.errPromptInput = !pattern.test(v)
       }
     },
 
@@ -90,13 +97,23 @@ export default {
   },
 
   methods: {
-    clickHandler(flag) {
-      this.cfg.cb[flag]()
-    },
-
-    promptRight() {
-      if (this.errPromptInput || !this.promptData) return
-      this.cfg.cb.btnRight({ value: trim(this.promptData) })
+    clickHandler(type) {
+      switch (type) {
+        case 'success':
+          if (this.crtType === 'prompt') {
+            if (this.errPromptInput || !this.promptData) return
+            this.cfg.cb.success(trim(this.promptData))
+          } else {
+            this.cfg.cb.success()
+          }
+          break
+        case 'failure':
+          this.cfg.cb.failure()
+          break
+        default:
+          this.cfg.cb.close()
+          break
+      }
     }
   }
 }

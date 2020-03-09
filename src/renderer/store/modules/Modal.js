@@ -14,29 +14,25 @@ const mutations = {
 
 const actions = {
   OPEN_MODAL({ commit }, modalCfg) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       commit('OPEN_MODAL_MUTATION', {
         ...modalCfg,
         cb: {
-          btn: function() {
-            commit('CLOSE_MODAL_MUTATION')
-            resolve('btn')
-          },
-          close: function() {
-            commit('CLOSE_MODAL_MUTATION')
-            resolve('close')
-          },
-          btnRight: function(res) {
+          success: function(res) {
             commit('CLOSE_MODAL_MUTATION')
             resolve(res)
           },
-          btnLeft: function() {
+          close: function() {
             commit('CLOSE_MODAL_MUTATION')
-            resolve('btnLeft')
+            reject('close')
+          },
+          failure: function() {
+            commit('CLOSE_MODAL_MUTATION')
+            reject()
           }
         }
       })
-    }).catch(err => console.log(err))
+    })
   }
 }
 
