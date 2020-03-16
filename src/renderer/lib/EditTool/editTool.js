@@ -140,6 +140,7 @@ const mdTable = {
 
   addColumn: () => {
     let { tbody, cellIndex } = mdTable.getTable()
+    if (typeof cellIndex === 'undefined') return
     tbody.childNodes.forEach((tr, key) => {
       let _childs = tr.childNodes
       let child = document.createElement(key ? 'td' : 'th')
@@ -148,6 +149,7 @@ const mdTable = {
   },
   addRow: () => {
     let { tbody, rowIndex, rows } = mdTable.getTable()
+    if (typeof rowIndex === 'undefined') return
     let childs = tbody.childNodes
     let child = document.createElement('tr')
     child.innerHTML = '<td></td>'.repeat(rows)
@@ -155,6 +157,7 @@ const mdTable = {
   },
   delColumn() {
     let { tbody, cellIndex, cells } = mdTable.getTable()
+    if (typeof cellIndex === 'undefined') return
     let _do = () => {
       tbody.childNodes.forEach(tr => {
         tr.childNodes[cellIndex].remove()

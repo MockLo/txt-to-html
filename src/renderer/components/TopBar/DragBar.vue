@@ -130,6 +130,7 @@ export default {
 
     openFinder() {
       remote.dialog.showOpenDialog(
+        remote.getCurrentWindow(),
         {
           title: '请选择文件',
           filters: [{ name: '文本文件', extensions: ['txt'] }],
