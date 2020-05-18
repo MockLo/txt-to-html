@@ -80,7 +80,7 @@ export default {
       })
       document.addEventListener('mousemove', e => {
         if (e.clientY > window.innerWidth || e.clientY < 0 || e.clientX < 0 || e.clientX > window.innerHeight) {
-          //在这加入你想执行的代码，此条件下鼠标已经在浏览器外
+          // 在这加入你想执行的代码，此条件下鼠标已经在浏览器外
           this.dragEnter = false
         }
       })
